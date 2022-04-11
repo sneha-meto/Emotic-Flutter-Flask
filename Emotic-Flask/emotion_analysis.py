@@ -1,5 +1,4 @@
 import pickle
-import pandas as pd
 
 
 def predict_emotion(tweet):
