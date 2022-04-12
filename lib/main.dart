@@ -1,6 +1,5 @@
-import 'dart:convert';
-import 'package:http/http.dart';
-
+import 'package:emoticflutter/pages/home_view.dart';
+import 'package:emoticflutter/pages/report.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,64 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  String result = "no data";
-
-  fetch() async {
-    Response response = await get(
-      Uri.parse('http://127.0.0.1:5000/'),
-//            headers: {
-//      'Content-type': 'application/json',
-//      "Accept": "application/json",
-//      "Access-Control-Allow-Origin": "*"
-//    }
-    );
-    print(response.body);
-    var decodedData = jsonDecode(response.body);
-    setState(() {
-      result = decodedData['query'];
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Text(result),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: fetch,
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      home: Report(),
     );
   }
 }
