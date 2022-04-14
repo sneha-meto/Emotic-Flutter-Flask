@@ -3,14 +3,14 @@ import 'package:emoticflutter/components/popular.dart';
 import 'package:emoticflutter/Constants/color.dart';
 import 'package:flutter/material.dart';
 
-class Viewall extends StatefulWidget {
-  const Viewall({Key? key}) : super(key: key);
+class ViewAll extends StatefulWidget {
+  const ViewAll({Key? key}) : super(key: key);
 
   @override
-  State<Viewall> createState() => _ViewallState();
+  State<ViewAll> createState() => _ViewAllState();
 }
 
-class _ViewallState extends State<Viewall> {
+class _ViewAllState extends State<ViewAll> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -20,13 +20,18 @@ class _ViewallState extends State<Viewall> {
         width: screenWidth,
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: kCard,
-          //border: Border.all(width: 3, color: Colors.black),
-          borderRadius: BorderRadius.all(Radius.circular(50)),
-        ),
-        child: ExpandableListView(
-          title: "View All",
-        ),
+            color: kCard,
+            //border: Border.all(width: 3, color: Colors.black),
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: Offset(2, 2), // changes position of shadow
+              ),
+            ]),
+        child: ExpandableListView(),
         /*child: AutoSizeText(
           widget.textName,
           maxLines: 3,
@@ -40,10 +45,6 @@ class _ViewallState extends State<Viewall> {
 }
 
 class ExpandableListView extends StatefulWidget {
-  final String title;
-
-  const ExpandableListView({required this.title});
-
   @override
   _ExpandableListViewState createState() => new _ExpandableListViewState();
 }
@@ -57,15 +58,22 @@ class _ExpandableListViewState extends State<ExpandableListView> {
       children: <Widget>[
         new Container(
           //color: Colors.blue,
-          padding: new EdgeInsets.symmetric(horizontal: 5.0),
+          padding: new EdgeInsets.fromLTRB(5, 0, 5, 5),
           child: new Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              AutoSizeText(
-                widget.title,
+              Text(
+                expandFlag ? "All Tweets" : "View all tweets",
                 maxLines: 2,
-                style: new TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.bold, color: kRed),
+                style: expandFlag
+                    ? TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w700,
+                        color: kCardTitle)
+                    : TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: kCardTitle),
               ),
               new IconButton(
                   icon: Icon(

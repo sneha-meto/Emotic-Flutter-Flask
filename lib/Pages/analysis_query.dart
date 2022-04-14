@@ -3,70 +3,160 @@ import 'package:emoticflutter/components/nav_bar.dart';
 import 'package:emoticflutter/components/button.dart';
 import 'package:emoticflutter/components/text_box.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:emoticflutter/Pages/report.dart';
 
-class Query extends StatefulWidget {
-  const Query({Key? key}) : super(key: key);
+enum QueryType { tag, text, user }
+
+class QueryPage extends StatefulWidget {
+  final bool isSenti;
+  const QueryPage({Key? key, required this.isSenti}) : super(key: key);
 
   @override
-  State<Query> createState() => _QueryState();
+  State<QueryPage> createState() => _QueryPageState();
 }
 
-class _QueryState extends State<Query> {
+class _QueryPageState extends State<QueryPage> {
+  QueryType queryType = QueryType.text;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _text = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackground,
+      backgroundColor: kPaleYellow,
       body: Center(
         child: Column(
           children: <Widget>[
             NavBar(),
-            Expanded(
+            SizedBox(
+              height: 100,
+            ),
+            Container(
+              padding: const EdgeInsets.all(20),
+              constraints: BoxConstraints(maxWidth: 900),
               child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                child: Column(
                   children: [
-                    Button(
-                      buttonName: "Text",
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Query()),
-                        );
-                      },
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 25,
+                        horizontal: 25,
+                      ),
+                      child: Text(
+                        widget.isSenti
+                            ? "Sentiment Analysis"
+                            : "Emotion Analysis",
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.w800,
+                          color: kOrange,
+                        ),
+                      ),
                     ),
-                    Button(
-                      buttonName: "Tag",
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Query()),
-                        );
-                      },
-                    ),
-                    Button(
-                      buttonName: "Post",
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Query()),
-                        );
-                      },
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                queryType = QueryType.text;
+                              });
+                            },
+                            child: SelectorButton(
+                              name: " Input text ",
+                              isActive: queryType == QueryType.text,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                queryType = QueryType.tag;
+                              });
+                            },
+                            child: SelectorButton(
+                              name: " Hashtag ",
+                              isActive: queryType == QueryType.tag,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                queryType = QueryType.user;
+                              });
+                            },
+                            child: SelectorButton(
+                                name: " Username ",
+                                isActive: queryType == QueryType.user),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
             ),
-            TextBox(
-                textInputType: TextInputType.text,
-                hint: "Text",
-                controller: _text,
-                fieldName: "Text"),
+            Container(
+              padding: const EdgeInsets.all(20),
+              constraints: BoxConstraints(maxWidth: 800),
+              child: TextBox(
+                  textInputType: TextInputType.text,
+                  hint: "Input query here..",
+                  controller: _text,
+                  fieldName: "Text",
+                  iconTapFunction: () {
+                    Get.to(() => Report(
+                          isSenti: true,
+                          input: "hello",
+                          type: "text",
+                        ));
+                  }),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class SelectorButton extends StatelessWidget {
+  final String name;
+  final bool isActive;
+
+  SelectorButton({required this.name, required this.isActive});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(7),
+      child: Container(
+        color: Colors.transparent,
+        height: 50,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25.0),
+            color: isActive ? kYellow : kOrange,
+            //gradient: LinearGradient(colors: [kBlue, kCyan])
+          ),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                name,
+                style: TextStyle(
+                  color: isActive ? kOrange : Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+//                      shadows: [Shadow(offset: Offset(1, 1), blurRadius: 2)]
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );

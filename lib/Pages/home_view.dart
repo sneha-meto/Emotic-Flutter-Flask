@@ -1,7 +1,8 @@
+import 'package:emoticflutter/Pages/analysis_query.dart';
 import 'package:emoticflutter/components/button.dart';
 import 'package:emoticflutter/Constants/color.dart';
-import 'package:emoticflutter/pages/analysis_query.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -14,99 +15,93 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackground,
+      backgroundColor: kPaleYellow,
       body: SafeArea(
           child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Column(
+          padding: const EdgeInsets.fromLTRB(30, 50, 30, 10),
+          child: ListView(
             children: [
-              Text(
-                'Emotic',
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.w900,
+              Center(
+                child: Text(
+                  'Emotic',
+                  style: TextStyle(
+                    fontSize: 45,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
               ),
-              Expanded(
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: Center(
-                      child: Container(
-                        //width: 600,
-                        //height: 600,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.network('https://picsum.photos/250?image=9'),
-                            //Image.asset("assets/images/logo.jpeg"),
-                          ],
-                        ),
-                      ),
-                    )),
-                    Expanded(
-                        child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Container(
-                          width: 600,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'In this course we will go over the basics of using Flutter Web for website development. Topics will include Responsive Layout, Deploying, Font Changes, Hover Functionality, Modals and more.',
-                                style: TextStyle(
-                                  fontSize: 21,
-                                ),
-                              ),
-                              Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: Button(
-                                        buttonName: "Sentiment Analysis",
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const Query()),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Button(
-                                        buttonName: "Emotion Analysis",
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const Query()),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    )),
-                  ],
-                ),
+              SizedBox(
+                height: 40,
               ),
+              LayoutBuilder(builder: (_context, constraints) {
+                if (constraints.maxWidth > 800) {
+                  return Row(
+                    children:
+                        pageChildren(context, constraints.biggest.width / 2),
+                  );
+                } else {
+                  return Column(
+                    children: pageChildren(context, constraints.biggest.width),
+                  );
+                }
+              }),
             ],
           ),
         ),
       )),
     );
   }
+}
+
+List<Widget> pageChildren(context, width) {
+  return <Widget>[
+    Image.asset(
+      "assets/images/cover.png",
+      width: width,
+    ),
+    Container(
+      width: width,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Perform sentiment analysis or emotion analysis and generate an analysis report on input text as well as twitter hashtags and user handles. \n\nPick analysis type to get started!',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, color: Colors.black54),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Button(
+                    buttonName: "Sentiment Analysis",
+                    onTap: () {
+                      Get.to(() => QueryPage(
+                            isSenti: true,
+                          ));
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: Button(
+                    buttonName: "Emotion Analysis",
+                    onTap: () {
+                      Get.to(() => QueryPage(
+                            isSenti: false,
+                          ));
+                    },
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    )
+  ];
 }

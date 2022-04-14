@@ -13,10 +13,10 @@ class _PopularState extends State<Popular> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 20,
+      elevation: 10,
       color: kCard,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(30),
       ),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -26,13 +26,14 @@ class _PopularState extends State<Popular> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
+                padding: EdgeInsets.only(bottom: 5),
                 //color: kGrey,
                 child: Text(
                   'Popular Tweets',
                   style: TextStyle(
                     fontSize: 25,
-                    fontWeight: FontWeight.w900,
-                    color: kRed,
+                    fontWeight: FontWeight.w700,
+                    color: kCardTitle,
                   ),
                 ),
               ),
@@ -40,9 +41,9 @@ class _PopularState extends State<Popular> {
                 child: Container(
                   //color: kGrey,
                   child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    child: ListView(
+//                      mainAxisAlignment: MainAxisAlignment.center,
+//                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Tweet(
                           user: "Adheela",
@@ -85,12 +86,13 @@ class Tweet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(5.0),
       child: Container(
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(5.0),
         decoration: BoxDecoration(
-            color: Color.fromRGBO(21, 32, 43, 1.0),
-            border: Border(bottom: BorderSide())),
+            color: Colors.white,
+            border: Border(
+                bottom: BorderSide(width: 2, color: Colors.grey.shade300))),
         child: Column(
           children: [
             new Row(
@@ -132,56 +134,66 @@ class Tweet extends StatelessWidget {
                 AutoSizeText(user,
                     maxLines: 2,
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
+                        color: Colors.black, fontWeight: FontWeight.bold)),
                 Flexible(
                   child: Container(
                     margin: EdgeInsets.only(left: 5.0),
-                    child: AutoSizeText(userHandle + " · 30m",
-                        maxLines: 2, style: TextStyle(color: Colors.grey[400])),
+                    child: Text(userHandle + " · 30m",
+                        maxLines: 2,
+                        style: TextStyle(
+                            color: Colors.black45,
+                            fontWeight: FontWeight.w500)),
                   ),
                 )
               ],
             ),
             Container(
                 margin: EdgeInsets.only(top: 5.0),
-                child: AutoSizeText(text,
-                    maxLines: 2, style: TextStyle(color: Colors.white))),
+                child: Text(text,
+                    maxLines: 2, style: TextStyle(color: Colors.black))),
             Container(
-              margin: EdgeInsets.only(top: 10.0),
+              margin: EdgeInsets.only(top: 5.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Icon(Icons.message, color: Colors.white),
+                      Icon(
+                        Icons.message,
+                        color: Colors.black45,
+                        size: 20,
+                      ),
                       Container(
                         margin: EdgeInsets.only(left: 3.0),
-                        child:
-                            Text("15", style: TextStyle(color: Colors.white)),
+                        child: Text("15",
+                            style:
+                                TextStyle(color: Colors.black45, fontSize: 12)),
                       )
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Icon(Icons.repeat, color: Colors.white),
+                      Icon(Icons.repeat, color: Colors.black45, size: 20),
                       Container(
                         margin: EdgeInsets.only(left: 3.0),
-                        child:
-                            Text("15", style: TextStyle(color: Colors.white)),
+                        child: Text("15",
+                            style:
+                                TextStyle(color: Colors.black45, fontSize: 12)),
                       )
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Icon(Icons.favorite_border, color: Colors.white),
+                      Icon(Icons.favorite_border,
+                          color: Colors.black45, size: 20),
                       Container(
                         margin: EdgeInsets.only(left: 3.0),
-                        child:
-                            Text("15", style: TextStyle(color: Colors.white)),
+                        child: Text("15",
+                            style:
+                                TextStyle(color: Colors.black45, fontSize: 12)),
                       )
                     ],
                   ),
-                  Icon(Icons.share, color: Colors.white)
                 ],
               ),
             )

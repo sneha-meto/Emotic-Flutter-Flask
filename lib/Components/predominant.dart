@@ -1,75 +1,97 @@
 import 'package:emoticflutter/Constants/color.dart';
 import 'package:flutter/material.dart';
 
-class Predominant extends StatefulWidget {
-  const Predominant({Key? key}) : super(key: key);
+class Predominant extends StatelessWidget {
+  final bool isSenti;
 
-  @override
-  State<Predominant> createState() => _PredominantState();
-}
+  Predominant({required this.isSenti});
 
-class _PredominantState extends State<Predominant> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 20,
-      color: kCard,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                //color: kGrey,
-                child: Text(
-                  'Predominant Sentiment',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w900,
-                    color: kRed,
+    return SizedBox(
+      width: 50,
+      child: Card(
+        elevation: 10,
+        color: kCard,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  //color: kGrey,
+                  child: Text(
+                    isSenti ? 'Predominant Sentiment' : 'Predominant Emotion',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w700,
+                      color: kCardTitle,
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Container(
-                  //color: kGrey,
-                  child: Center(
+                Expanded(
+                  child: Container(
+                    //color: kGrey,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Flexible(
+                        Container(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Image.network(
-                              'https://picsum.photos/250?image=9',
+                            child: Image.asset(
+                              'assets/images/sad.png',
                               fit: BoxFit.contain,
                             ),
                           ),
+                          constraints: BoxConstraints(maxWidth: 160),
                         ),
-                        Flexible(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "\"it\'s mostly negative\"",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w900,
-                                color: kRed,
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Text(
+                                  isSenti
+                                      ? "It's mostly negative"
+                                      : "The predominant emotion is sadness",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: kOrange,
+                                  ),
+                                ),
                               ),
-                            ),
+                              isSenti
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Text(
+                                        "Subjectivity : 0.5",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                          color: kOrange,
+                                        ),
+                                      ),
+                                    )
+                                  : Container()
+                            ],
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

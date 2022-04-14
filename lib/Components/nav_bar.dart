@@ -1,32 +1,10 @@
 import 'package:emoticflutter/pages/home_view.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
-class NavBarItem extends StatefulWidget {
-  final String title;
-  NavBarItem({required this.title});
-
-  @override
-  State<NavBarItem> createState() => _NavBarItemState();
-}
-
-class _NavBarItemState extends State<NavBarItem> {
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      widget.title,
-      style: TextStyle(fontSize: 18),
-    );
-  }
-}
-
-class NavBar extends StatefulWidget {
+class NavBar extends StatelessWidget {
   const NavBar({Key? key}) : super(key: key);
 
-  @override
-  State<NavBar> createState() => _NavBarState();
-}
-
-class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -38,8 +16,19 @@ class _NavBarState extends State<NavBar> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
-                height: 80,
-                child: Image.network('https://picsum.photos/250?image=9'),
+                height: 60,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, right: 10),
+                      child: Image.asset("assets/images/logopic.png"),
+                    ),
+                    Text(
+                      "Emotic",
+                      style: TextStyle(fontSize: 25),
+                    )
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -48,18 +37,19 @@ class _NavBarState extends State<NavBar> {
             Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 0.0, horizontal: 100.0),
-              child: Row(
-                children: [
-                  IconButton(
-                      icon: Icon(Icons.home),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Home()),
-                        );
-                      }),
-                  NavBarItem(title: 'Home'),
-                ],
+              child: InkWell(
+                onTap: () {
+                  Get.to(Home());
+                },
+                child: Row(
+                  children: [
+                    Icon(Icons.home),
+                    Text(
+                      " Home",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ],
+                ),
               ),
             )
           ],

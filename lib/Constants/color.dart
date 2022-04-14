@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-final kRed = Color.fromARGB(255, 211, 85, 85);
-final kGrey = Color.fromRGBO(158, 158, 158, 1);
-final kBackground = Color.fromRGBO(255, 235, 59, 1);
-final kCard = Color(0xffffefe4);
+const kCardTitle = Colors.black;
+const kGrey = Color.fromRGBO(158, 158, 158, 1);
+const kBackground = Color.fromRGBO(255, 235, 59, 1);
+const kCard = Colors.white;
+const kOrange = Color(0xffF88C4D);
+const kPaleYellow = Color(0xffF9F2DD);
+const kYellow = Color(0xffF5DC88);

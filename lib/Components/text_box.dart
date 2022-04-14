@@ -1,64 +1,72 @@
+import 'package:emoticflutter/Components/simple_icon_button.dart';
 import 'package:flutter/material.dart';
+import 'package:emoticflutter/Constants/color.dart';
 
 class TextBox extends StatefulWidget {
   final TextInputType textInputType;
   final String hint;
   final TextEditingController controller;
   final String fieldName;
+  final Function iconTapFunction;
 
-  TextBox({required this.textInputType, required this.hint, required this.controller, required this.fieldName});
+  TextBox(
+      {required this.textInputType,
+      required this.hint,
+      required this.controller,
+      required this.fieldName,
+      required this.iconTapFunction});
 
   @override
   _TextBoxState createState() => _TextBoxState();
 }
 
 class _TextBoxState extends State<TextBox> {
-
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(100.0),
+        padding: EdgeInsets.all(10.0),
         child: TextFormField(
           obscureText: false,
           autocorrect: false,
-          style: TextStyle(color: Colors.white),
+//          style: TextStyle(color: Colors.white),
           keyboardType: widget.textInputType,
           validator: (value) {},
           controller: widget.controller,
           decoration: InputDecoration(
-            suffixIcon: IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {}
+            filled: true,
+            fillColor: Colors.white,
+            suffixIcon: SimpleIconButton(
+              tapFunction: widget.iconTapFunction,
             ),
             isDense: true,
             hintText: widget.hint,
-            hintStyle: TextStyle(color: Colors.black87),
+            hintStyle: TextStyle(color: Colors.black54),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15.0),
+              borderRadius: BorderRadius.circular(25.0),
               borderSide: BorderSide(
-                color: Color(0xFF54ABD0),
+                color: kYellow,
                 width: 2,
               ),
             ),
-            contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+            contentPadding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
             disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15.0),
+              borderRadius: BorderRadius.circular(25.0),
               borderSide: BorderSide(
-                color: Color(0xFF54ABD0),
+                color: Colors.grey,
                 width: 2,
               ),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15.0),
+              borderRadius: BorderRadius.circular(25.0),
               borderSide: BorderSide(
-                color: Color(0xFF54ABD0),
+                color: kYellow,
                 width: 2,
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15.0),
-              borderSide: BorderSide(color: Color(0xFF54ABD0), width: 2),
+              borderRadius: BorderRadius.circular(25.0),
+              borderSide: BorderSide(color: kOrange, width: 2),
             ),
           ),
         ),

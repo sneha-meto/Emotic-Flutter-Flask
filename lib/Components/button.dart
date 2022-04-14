@@ -2,52 +2,49 @@ import 'package:emoticflutter/Constants/color.dart';
 import 'package:flutter/material.dart';
 //final kCyan = Color(0xff49C9C4);
 
-class Button extends StatefulWidget {
+class Button extends StatelessWidget {
   final String buttonName;
   final Function onTap;
+  double fontSize;
+  Color buttonColor;
 
   Button({
     required this.buttonName,
     required this.onTap,
+    this.fontSize = 18,
+    this.buttonColor = kOrange,
   });
 
   @override
-  _ButtonState createState() => _ButtonState();
-}
-
-class _ButtonState extends State<Button> {
-  bool _hasBeenPressed = false;
-  @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(5),
+      padding: EdgeInsets.all(7),
       child: Container(
         color: Colors.transparent,
-        width: 150,
+
+//        width: 150,
         height: 50,
         child: InkWell(
-          onTap: (() {
-            setState(() {
-              _hasBeenPressed = !_hasBeenPressed;
-            });
-            widget.onTap();
-          }),
+          onTap: () {
+            onTap();
+          },
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.0),
-              color: _hasBeenPressed ? kRed : kGrey,
+              borderRadius: BorderRadius.circular(25.0),
+              color: buttonColor,
               //gradient: LinearGradient(colors: [kBlue, kCyan])
             ),
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  widget.buttonName,
+                  buttonName,
                   style: TextStyle(
-                      color: Colors.white,
-                      //fontSize: 15.0,
-                      fontWeight: FontWeight.bold,
-                      shadows: [Shadow(offset: Offset(1, 1), blurRadius: 2)]),
+                    color: Colors.white,
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.bold,
+//                      shadows: [Shadow(offset: Offset(1, 1), blurRadius: 2)]
+                  ),
                 ),
               ),
             ),

@@ -11,27 +11,24 @@ class Chart extends StatefulWidget {
 
 class _ChartState extends State<Chart> {
   Map<String, double> dataMap = {
-    "Flutter": 5,
-    "React": 3,
-    "Xamarin": 2,
-    "Ionic": 2,
+    "Positive": 5,
+    "Neutral": 2,
+    "Negative": 3,
   };
 
   final colorList = <Color>[
-    Color(0xfffdcb6e),
-    Color(0xff0984e3),
-    Color(0xfffd79a8),
-    Color(0xffe17055),
-    Color(0xff6c5ce7),
+    Colors.green.shade400,
+    Colors.lightBlue.shade400,
+    Colors.red.shade400,
   ];
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 20,
+      elevation: 10,
       color: kCard,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(30),
       ),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -40,15 +37,14 @@ class _ChartState extends State<Chart> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                child: Text(
-                  'Overall Sentiment',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w900,
-                    color: kRed,
-                  ),
+                  child: Text(
+                'Overall Sentiment',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w700,
+                  color: kCardTitle,
                 ),
-              ),
+              )),
               Expanded(
                 child: Container(
                   child: Center(
