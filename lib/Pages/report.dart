@@ -8,12 +8,18 @@ import 'package:emoticflutter/components/related.dart';
 import 'package:emoticflutter/Constants/color.dart';
 import 'package:emoticflutter/components/nav_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:emoticflutter/Models/sentiment_text.dart';
 
 class Report extends StatelessWidget {
   final bool isSenti;
   final String type;
   final String input;
-  Report({required this.isSenti, required this.input, required this.type});
+  final SentiText response;
+  Report(
+      {required this.isSenti,
+      required this.input,
+      required this.type,
+      required this.response});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +67,8 @@ class Report extends StatelessWidget {
                 shrinkWrap: true,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10,
-                children: gridChildren(type, isSenti)),
+                children: gridChildren(type, isSenti, type == "text",
+                    response.sentiment, response.subjectivity)),
             type == "text" ? Container() : ViewAll()
           ],
         ),
@@ -70,14 +77,23 @@ class Report extends StatelessWidget {
   }
 }
 
-List<Widget> gridChildren(type, isSenti) {
+List<Widget> gridChildren(type, isSenti, isText, senti, subj) {
   if (type == "text") {
     return [
-      Predominant(isSenti: isSenti),
+      Predominant(
+          isSenti: isSenti,
+          isText: isText,
+          sentiment: senti,
+          subjectivity: subj),
     ];
   } else {
     return [
-      Predominant(isSenti: isSenti),
+      Predominant(
+        isSenti: isSenti,
+        isText: isText,
+        sentiment: senti,
+        subjectivity: subj,
+      ),
       Chart(),
       Popular(),
       Related(),

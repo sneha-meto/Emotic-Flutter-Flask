@@ -1,42 +1,38 @@
-import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:emoticflutter/Constants/auth.dart';
-import 'package:emoticflutter/Models/sentiment_text.dart';
-import 'package:emoticflutter/Models/emotion_text.dart';
+import 'package:emoticflutter/Models/sentiment_twitter.dart';
 
-class TextServices {
+class TwitterSentiServices {
   static var client = http.Client();
 
   var headers = {'X-Api-Key': apiKey, 'Content-Type': 'application/json'};
 
-  Future<SentiText?> fetchTextSentiment(String text) async {
-    var body = jsonEncode({"text": text});
+  Future<SentiTwitter?> fetchTagSentiment(tag) async {
+    var body = '''{\n    "hashtag":$tag\n}''';
     var response = await client.post(
-        Uri.parse('http://127.0.0.1:5000/senti/text'),
+        Uri.parse('http://127.0.0.1:5000/senti/tag'),
         headers: headers,
         body: body);
 
     if (response.statusCode == 200) {
       var jsonString = response.body;
-      print(response.body);
-      return sentiTextFromJson(jsonString);
+      return sentiTwitterFromJson(jsonString);
     } else {
       print(response.reasonPhrase);
       return null;
     }
   }
 
-  Future<EmoText?> fetchTextEmotion(String text) async {
-    var body = jsonEncode({"text": text});
+  Future<SentiTwitter?> fetchUserSentiment(user) async {
+    var body = '''{\n    "username":$user\n}''';
     var response = await client.post(
-        Uri.parse('http://127.0.0.1:5000/emo/text'),
+        Uri.parse('http://127.0.0.1:5000/senti/user'),
         headers: headers,
         body: body);
 
     if (response.statusCode == 200) {
       var jsonString = response.body;
-      return emoTextFromJson(jsonString);
+      return sentiTwitterFromJson(jsonString);
     } else {
       print(response.reasonPhrase);
       return null;

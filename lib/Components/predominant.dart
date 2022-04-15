@@ -3,8 +3,21 @@ import 'package:flutter/material.dart';
 
 class Predominant extends StatelessWidget {
   final bool isSenti;
+  final bool isText;
+  final double? subjectivity;
+  final String sentiment;
 
-  Predominant({required this.isSenti});
+  Map iconPath = {
+    "positive": "assets/images/positive.png",
+    "neutral": "assets/images/neutral.png",
+    "negative": "assets/images/sad.png"
+  };
+
+  Predominant(
+      {required this.isSenti,
+      required this.isText,
+      required this.sentiment,
+      this.subjectivity});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +57,7 @@ class Predominant extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Image.asset(
-                              'assets/images/sad.png',
+                              iconPath[sentiment],
                               fit: BoxFit.contain,
                             ),
                           ),
@@ -59,7 +72,7 @@ class Predominant extends StatelessWidget {
                                 padding: const EdgeInsets.all(5.0),
                                 child: Text(
                                   isSenti
-                                      ? "It's mostly negative"
+                                      ? "It's mostly $sentiment"
                                       : "The predominant emotion is sadness",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -73,7 +86,7 @@ class Predominant extends StatelessWidget {
                                   ? Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Text(
-                                        "Subjectivity : 0.5",
+                                        "Subjectivity : ${subjectivity.toString()}",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 18,
