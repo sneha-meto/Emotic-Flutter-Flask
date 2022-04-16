@@ -1,5 +1,7 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:emoticflutter/components/popular.dart';
+import 'package:emoticflutter/Components/popular.dart';
 import 'package:emoticflutter/Constants/color.dart';
 import 'package:flutter/material.dart';
 
@@ -93,16 +95,25 @@ class _ExpandableListViewState extends State<ExpandableListView> {
         ),
         new ExpandableContainer(
             expanded: expandFlag,
-            child: new ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                return Tweet(
-                  user: "Adheela",
-                  userHandle: "@adhee22",
-                  text:
-                      "In this course we will go over the basics of using Flutter Web for website development. Topics will include Responsive Layout, Deploying, Font Changes, Hover Functionality, Modals and more.",
+            child: FutureBuilder(
+              future: DefaultAssetBundle.of(context)
+                  .loadString('assets/loadjson/details.json'),
+              builder: (context, snapshot) {
+                // Decode the JSON
+                var newData = json.decode(snapshot.data.toString());
+                return ListView.builder(
+                  itemCount: newData == null ? 0 : newData.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Tweet(user: newData[index]['text'].toString(), userHandle: newData[index]['text'].toString(),
+                      text: newData[index]['text'].toString(),
+                      time: newData[index]['img'].toString(),
+                      reTweet: newData[index]['img'].toString(),
+                      comment: newData[index]['img'].toString(),
+                      likes: newData[index]['img'].toString(),
+                    );
+                  },
                 );
               },
-              //itemCount: 15,
             )),
       ],
     );

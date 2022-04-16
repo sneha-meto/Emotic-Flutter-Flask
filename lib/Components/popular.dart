@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emoticflutter/Constants/color.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class Popular extends StatefulWidget {
   const Popular({Key? key}) : super(key: key);
@@ -10,6 +11,7 @@ class Popular extends StatefulWidget {
 }
 
 class _PopularState extends State<Popular> {
+  // List data=[];
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -41,29 +43,27 @@ class _PopularState extends State<Popular> {
                 child: Container(
                   //color: kGrey,
                   child: Center(
-                    child: ListView(
-//                      mainAxisAlignment: MainAxisAlignment.center,
-//                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Tweet(
-                          user: "Adheela",
-                          userHandle: "@adhee22",
-                          text:
-                              "In this course we will go over the basics of using Flutter Web for website development. Topics will include Responsive Layout, Deploying, Font Changes, Hover Functionality, Modals and more.",
-                        ),
-                        Tweet(
-                          user: "Adheela",
-                          userHandle: "@adhee22",
-                          text:
-                              "In this course we will go over the basics of using Flutter Web for website development. Topics will include Responsive Layout, Deploying, Font Changes, Hover Functionality, Modals and more.",
-                        ),
-                        Tweet(
-                          user: "Adheela",
-                          userHandle: "@adhee22",
-                          text:
-                              "In this course we will go over the basics of using Flutter Web for website development. Topics will include Responsive Layout, Deploying, Font Changes, Hover Functionality, Modals and more.",
-                        ),
-                      ],
+                    child: FutureBuilder(
+                      future: DefaultAssetBundle.of(context)
+                          .loadString('assets/loadjson/details.json'),
+                      builder: (context, snapshot) {
+                        // Decode the JSON
+                        var newData = json.decode(snapshot.data.toString());
+                        return ListView.builder(
+                          itemCount: newData == null ? 0 : newData.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Tweet(
+                              user: newData[index]['text'].toString(),
+                              userHandle: newData[index]['text'].toString(),
+                              text: newData[index]['text'].toString(),
+                              time: newData[index]['img'].toString(),
+                              reTweet: newData[index]['img'].toString(),
+                              comment: newData[index]['text'].toString(),
+                              likes: newData[index]['text'].toString(),
+                            );
+                          },
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -80,8 +80,19 @@ class Tweet extends StatelessWidget {
   final String user;
   final String userHandle;
   final String text;
+  final String time;
+  final String reTweet;
+  final String comment;
+  final String likes;
 
-  Tweet({required this.user, required this.userHandle, required this.text});
+  Tweet(
+      {required this.user,
+      required this.userHandle,
+      required this.text,
+      required this.time,
+      required this.reTweet,
+      required this.comment,
+      required this.likes});
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +149,7 @@ class Tweet extends StatelessWidget {
                 Flexible(
                   child: Container(
                     margin: EdgeInsets.only(left: 5.0),
-                    child: Text(userHandle + " · 30m",
+                    child: Text(userHandle + " · $time",
                         maxLines: 2,
                         style: TextStyle(
                             color: Colors.black45,
@@ -165,7 +176,7 @@ class Tweet extends StatelessWidget {
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 3.0),
-                        child: Text("15",
+                        child: Text(comment.toString(),
                             style:
                                 TextStyle(color: Colors.black45, fontSize: 12)),
                       )
@@ -176,7 +187,7 @@ class Tweet extends StatelessWidget {
                       Icon(Icons.repeat, color: Colors.black45, size: 20),
                       Container(
                         margin: EdgeInsets.only(left: 3.0),
-                        child: Text("15",
+                        child: Text(reTweet,
                             style:
                                 TextStyle(color: Colors.black45, fontSize: 12)),
                       )
@@ -188,7 +199,7 @@ class Tweet extends StatelessWidget {
                           color: Colors.black45, size: 20),
                       Container(
                         margin: EdgeInsets.only(left: 3.0),
-                        child: Text("15",
+                        child: Text(likes,
                             style:
                                 TextStyle(color: Colors.black45, fontSize: 12)),
                       )

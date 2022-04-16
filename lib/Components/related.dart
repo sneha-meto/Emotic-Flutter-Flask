@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:emoticflutter/Constants/color.dart';
 import 'package:flutter/material.dart';
 
@@ -41,12 +43,28 @@ class _RelatedState extends State<Related> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
+
                       children: [
-                        TagContainer(textName: "#KingdomHearts20THanniversary"),
-                        TagContainer(textName: "#KingdomHearts20THanniversary"),
-                        TagContainer(textName: "#Kingdomersary"),
-                        TagContainer(textName: "#KingdomHearts20THanniversary"),
-                        TagContainer(textName: "#Kary"),
+                        Expanded(
+                          child: Container(
+                            child: Center(
+                              child: FutureBuilder(
+                                future: DefaultAssetBundle.of(context)
+                                    .loadString('assets/loadjson/details.json'),
+                                builder: (context, snapshot) {
+                                  // Decode the JSON
+                                  var newData = json.decode(snapshot.data.toString());
+                                  return ListView.builder(
+                                    itemCount: newData == null ? 0 : newData.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return TagContainer(textName: newData[index]['img']);
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
