@@ -1,8 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emoticflutter/Components/predominant.dart';
 import 'package:emoticflutter/Components/viewall.dart';
-import 'package:emoticflutter/components/piechart.dart';
-import 'package:emoticflutter/components/popular.dart';
+import 'package:emoticflutter/Components/piechart.dart';
+import 'package:emoticflutter/Components/popular.dart';
 import 'package:emoticflutter/Components/predominant.dart';
 import 'package:emoticflutter/components/related.dart';
 import 'package:emoticflutter/Constants/color.dart';
@@ -94,7 +94,7 @@ List<Widget> gridChildren(type, isSenti, isText, senti, subj) {
         sentiment: senti,
         subjectivity: subj,
       ),
-      Chart(),
+      Chart(isSentiment:isSenti),
       Popular(),
       Related(),
     ];

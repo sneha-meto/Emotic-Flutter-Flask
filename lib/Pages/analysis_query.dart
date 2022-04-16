@@ -112,12 +112,12 @@ class _QueryPageState extends State<QueryPage> {
                   controller: _text,
                   fieldName: "Text",
                   iconTapFunction: () {
-                    widget.textController.fetchTextSentiment("i am happy");
+                    widget.textController.fetchTextSentiment(_text.text);
 
                     Get.to(() => Report(
-                          isSenti: true,
-                          input: "hello",
-                          type: "text",
+                          isSenti: widget.isSenti,
+                          input: _text.text,
+                          type: queryType.name,
                           response: widget.textController.textSentiment,
                         ));
                   }),

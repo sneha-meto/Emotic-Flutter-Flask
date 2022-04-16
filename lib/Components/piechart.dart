@@ -3,27 +3,50 @@ import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 
 class Chart extends StatefulWidget {
-  const Chart({Key? key}) : super(key: key);
+  List<Color> colorList=[];
+
+  Chart({Key?key, required this.isSentiment}) : super(key: key);
+  final bool isSentiment;
+  Map<String, double>  dataMap={};
 
   @override
   State<Chart> createState() => _ChartState();
+
+
 }
 
 class _ChartState extends State<Chart> {
-  Map<String, double> dataMap = {
-    "Positive": 5,
-    "Neutral": 2,
-    "Negative": 3,
-  };
-
-  final colorList = <Color>[
-    Colors.green.shade400,
-    Colors.lightBlue.shade400,
-    Colors.red.shade400,
-  ];
-
   @override
   Widget build(BuildContext context) {
+    if(widget.isSentiment) {
+      widget.dataMap = {
+        "Positive": 5,
+        "Neutral": 2,
+        "Negative": 3,
+      };
+       widget.colorList = <Color>[
+        Colors.green.shade400,
+        Colors.lightBlue.shade400,
+        Colors.red.shade400,
+      ];
+    }
+    else{
+      widget.dataMap = {
+        "Happy": 5,
+        "fear": 2,
+        "anger": 3,
+        "sad": 2,
+        "excited": 3,
+      };
+
+      widget.colorList = <Color>[
+        Colors.green.shade400,
+        Colors.lightBlue.shade400,
+        Colors.red.shade400,
+        Colors.yellow,
+        Colors.pink,
+      ];
+    }
     return Card(
       elevation: 10,
       color: kCard,
@@ -49,8 +72,8 @@ class _ChartState extends State<Chart> {
                 child: Container(
                   child: Center(
                     child: PieChart(
-                      dataMap: dataMap,
-                      colorList: colorList,
+                      dataMap: widget.dataMap,
+                      colorList: widget.colorList,
                       chartType: ChartType.disc,
                       //centerText: "HYBRID",
                       legendOptions: LegendOptions(
