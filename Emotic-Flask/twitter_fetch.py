@@ -77,6 +77,7 @@ class TwitterFetch:
         print(f"tweet time:{ith_tweet[10]}")
 
     def scrape(self, istag, input):
+        self.cleaned_tweets.clear()
         numtweet = 50
         api = self.authenticate()
 

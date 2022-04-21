@@ -9,17 +9,59 @@ import 'package:emoticflutter/Constants/color.dart';
 import 'package:emoticflutter/components/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:emoticflutter/Models/sentiment_text.dart';
+import 'package:get/get.dart';
+import 'package:emoticflutter/Controllers/text_controller.dart';
+import 'package:emoticflutter/Controllers/twitter_emo_controller.dart';
+import 'package:emoticflutter/Controllers/twitter_senti_controller.dart';
 
-class Report extends StatelessWidget {
+class Report extends StatefulWidget {
   final bool isSenti;
   final String type;
   final String input;
-  final SentiText response;
-  Report(
-      {required this.isSenti,
-      required this.input,
-      required this.type,
-      required this.response});
+  Report({
+    required this.isSenti,
+    required this.input,
+    required this.type,
+  });
+
+  final TextController textController = Get.put(TextController());
+  final TwitterSentiController twitterSentiController =
+      Get.put(TwitterSentiController());
+  final TwitterEmoController twitterEmoController =
+      Get.put(TwitterEmoController());
+
+  @override
+  State<Report> createState() => _ReportState();
+}
+
+class _ReportState extends State<Report> {
+  callApi(type, input) {
+    if (type == "user") {
+      if (widget.isSenti) {
+        widget.twitterSentiController.fetchUserSentiment(input);
+      } else {
+        widget.twitterEmoController.fetchUserEmotion(input);
+      }
+    } else if (type == "tag") {
+      if (widget.isSenti) {
+        widget.twitterSentiController.fetchTagSentiment(input);
+      } else {
+        widget.twitterEmoController.fetchTagEmotion(input);
+      }
+    } else {
+      if (widget.isSenti) {
+        widget.textController.fetchTextSentiment(input);
+      } else {
+        widget.textController.fetchTextEmotion(input);
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    callApi(widget.type, widget.input);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +78,7 @@ class Report extends StatelessWidget {
                 horizontal: 25,
               ),
               child: Text(
-                isSenti
+                widget.isSenti
                     ? "Sentiment Analysis Report"
                     : "Emotion Analysis Report",
                 style: TextStyle(
@@ -54,8 +96,8 @@ class Report extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  RoundedContainer(textName: type),
-                  RoundedContainer(textName: input),
+                  RoundedContainer(textName: widget.type),
+                  RoundedContainer(textName: widget.input),
                 ],
               ),
             ),
@@ -67,9 +109,11 @@ class Report extends StatelessWidget {
                 shrinkWrap: true,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10,
-                children: gridChildren(type, isSenti, type == "text",
-                    response.sentiment, response.subjectivity)),
-            type == "text" ? Container() : ViewAll()
+                children: gridChildren(
+                  widget.type,
+                  widget.isSenti,
+                )),
+//            widget.type == "text" ? Container() : ViewAll()
           ],
         ),
       ),
@@ -77,26 +121,29 @@ class Report extends StatelessWidget {
   }
 }
 
-List<Widget> gridChildren(type, isSenti, isText, senti, subj) {
+List<Widget> gridChildren(
+  type,
+  isSenti,
+) {
   if (type == "text") {
     return [
       Predominant(
-          isSenti: isSenti,
-          isText: isText,
-          sentiment: senti,
-          subjectivity: subj),
+        isSenti: isSenti,
+        type: type,
+      ),
     ];
   } else {
     return [
       Predominant(
         isSenti: isSenti,
-        isText: isText,
-        sentiment: senti,
-        subjectivity: subj,
+        type: type,
       ),
-      Chart(isSentiment:isSenti),
-      Popular(),
-      Related(),
+      Chart(
+        isSentiment: isSenti,
+        type: type,
+      ),
+//      Popular(),
+//      Related(),
     ];
   }
 }
@@ -114,7 +161,7 @@ class RoundedContainer extends StatelessWidget {
       padding: EdgeInsets.all(5),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-        constraints: BoxConstraints(minWidth: 200),
+        constraints: BoxConstraints(minWidth: 200, maxWidth: 200),
         decoration: BoxDecoration(
           color: Colors.white,
 //            border: Border.all(width: 3, color: kOrange),
@@ -129,12 +176,11 @@ class RoundedContainer extends StatelessWidget {
           ],
         ),
         child: Center(
-          child: AutoSizeText(
+          child: Text(
             textName,
             maxLines: 3,
-            maxFontSize: 20,
-            minFontSize: 1,
             style: TextStyle(fontSize: 18.0),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ),

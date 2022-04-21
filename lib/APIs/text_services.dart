@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:emoticflutter/Constants/auth.dart';
 import 'package:emoticflutter/Models/sentiment_text.dart';

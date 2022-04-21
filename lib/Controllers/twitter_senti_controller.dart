@@ -2,14 +2,27 @@ import 'package:get/state_manager.dart';
 import 'package:emoticflutter/APIs/twitter_senti_services.dart';
 import 'package:emoticflutter/Models/sentiment_twitter.dart';
 
-class ReportController extends GetxController {
-  Future<SentiTwitter?> fetchTagEmotion(tag) async {
-    var tagEmotion = await TwitterSentiServices().fetchTagSentiment(tag);
-    return tagEmotion;
+class TwitterSentiController extends GetxController {
+  var sentiTweet = SentiTwitter(
+      analysis: Analysis(positive: 0, negative: 0, neutral: 0),
+      count: 0,
+      popularTweets: [],
+      relatedTags: [],
+      tweets: []);
+
+  RxBool isLoading = false.obs;
+
+  void fetchTagSentiment(tag) async {
+    isLoading(true);
+    var tagSentiment = await TwitterSentiServices().fetchTagSentiment(tag);
+    sentiTweet = tagSentiment!;
+    isLoading(false);
   }
 
-  Future<SentiTwitter?> fetchUserEmotion(user) async {
+  void fetchUserSentiment(user) async {
+    isLoading(true);
     var userSentiment = await TwitterSentiServices().fetchUserSentiment(user);
-    return userSentiment;
+    sentiTweet = userSentiment!;
+    isLoading(false);
   }
 }

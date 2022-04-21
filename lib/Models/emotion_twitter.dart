@@ -19,6 +19,7 @@ class EmoTwitter {
   });
 
   Analysis analysis;
+
   int count;
   List<double> popularTweets;
   List<String> relatedTags;
@@ -76,6 +77,37 @@ class Analysis {
         "sadness": sadness,
         "surprise": surprise,
       };
+
+  Map<String, double> getMap() {
+    Map<String, double> emos = {
+      "Anger": anger.toDouble(),
+      "Fear": fear.toDouble(),
+      "Joy": joy.toDouble(),
+      "Love": love.toDouble(),
+      "Sadness": sadness.toDouble(),
+      "Surprise": surprise.toDouble()
+    };
+    return emos;
+  }
+
+  String getPredominant() {
+    Map<String, int> emos = {
+      "anger": anger,
+      "fear": fear,
+      "joy": joy,
+      "love": love,
+      "sadness": sadness,
+      "surprise": surprise
+    };
+    var sorted = Map.fromEntries(
+        emos.entries.toList()..sort((e1, e2) => e1.value.compareTo(e2.value)));
+    var keys = sorted.keys.toList();
+    if (emos[keys[keys.length - 1]] == emos[keys[keys.length - 2]]) {
+      return "a tie";
+    } else {
+      return keys[keys.length - 1];
+    }
+  }
 }
 
 class Tweet {

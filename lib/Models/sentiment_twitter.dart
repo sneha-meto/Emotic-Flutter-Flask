@@ -64,6 +64,26 @@ class Analysis {
         "neutral": neutral,
         "positive": positive,
       };
+
+  Map<String, double> getMap() {
+    Map<String, double> sentis = {
+      "Negative": negative.toDouble(),
+      "Neutral": neutral.toDouble(),
+      "Positive": positive.toDouble(),
+    };
+    return sentis;
+  }
+
+  String getPredominant() {
+    if (negative > neutral && negative > positive)
+      return "negative";
+    else if (positive > neutral && positive > neutral)
+      return "positive";
+    else if (neutral > positive && neutral > negative)
+      return "neutral";
+    else
+      return "a tie";
+  }
 }
 
 class Tweet {

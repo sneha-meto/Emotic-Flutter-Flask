@@ -4,15 +4,24 @@ import 'package:emoticflutter/Models/emotion_text.dart';
 import 'package:emoticflutter/Models/sentiment_text.dart';
 
 class TextController extends GetxController {
-  SentiText textSentiment = SentiText(sentiment: "neutral", subjectivity: 0.0);
+  var textSentiment = SentiText(sentiment: "neutral", subjectivity: 0.0);
+  var textEmotion = EmoText(
+    sentiment: "neutral",
+  );
+
+  RxBool isLoading = false.obs;
 
   void fetchTextEmotion(String text) async {
-    var textEmotion = await TextServices().fetchTextEmotion(text);
-    textEmotion = textEmotion;
+    isLoading(true);
+    var textEmo = await TextServices().fetchTextEmotion(text);
+    textEmotion = textEmo!;
+    isLoading(false);
   }
 
   void fetchTextSentiment(String text) async {
-    var textSentiment = await TextServices().fetchTextSentiment(text);
-    textSentiment = textSentiment;
+    isLoading(true);
+    var textSenti = await TextServices().fetchTextSentiment(text);
+    textSentiment = textSenti!;
+    isLoading(false);
   }
 }

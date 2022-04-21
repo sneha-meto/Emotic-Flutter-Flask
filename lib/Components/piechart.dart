@@ -1,52 +1,47 @@
 import 'package:emoticflutter/Constants/color.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:emoticflutter/Utilities/controller_services.dart';
 
-class Chart extends StatefulWidget {
-  List<Color> colorList=[];
-
-  Chart({Key?key, required this.isSentiment}) : super(key: key);
+class Chart extends StatelessWidget {
+  Chart({Key? key, required this.isSentiment, required this.type})
+      : super(key: key);
   final bool isSentiment;
-  Map<String, double>  dataMap={};
+  final String type;
 
-  @override
-  State<Chart> createState() => _ChartState();
+//  final Map<String, double> dataMap = {
+//    "negative": 6,
+//    "neutral": 3,
+//    "positive": 1,
+//  };
 
+  final List<Color> colorList = <Color>[
+    Colors.red.shade400,
+    Colors.lightBlue.shade400,
+    Colors.green.shade400,
+  ];
 
-}
+//  final Map<String, double> dataMap2 = {
+//    "anger": 2,
+//    "fear": 4,
+//    "joy": 5,
+//    "love": 4,
+//    "sadness": 9,
+//    "surprise": 1,
+//  };
 
-class _ChartState extends State<Chart> {
+  final List<Color> colorList2 = <Color>[
+    Colors.red.shade400,
+    Colors.black45,
+    Colors.yellow.shade400,
+    Colors.pink.shade400,
+    Colors.blue.shade400,
+    Colors.green.shade400,
+  ];
+
   @override
   Widget build(BuildContext context) {
-    if(widget.isSentiment) {
-      widget.dataMap = {
-        "Positive": 5,
-        "Neutral": 2,
-        "Negative": 3,
-      };
-       widget.colorList = <Color>[
-        Colors.green.shade400,
-        Colors.lightBlue.shade400,
-        Colors.red.shade400,
-      ];
-    }
-    else{
-      widget.dataMap = {
-        "Happy": 5,
-        "fear": 2,
-        "anger": 3,
-        "sad": 2,
-        "excited": 3,
-      };
-
-      widget.colorList = <Color>[
-        Colors.green.shade400,
-        Colors.lightBlue.shade400,
-        Colors.red.shade400,
-        Colors.yellow,
-        Colors.pink,
-      ];
-    }
     return Card(
       elevation: 10,
       color: kCard,
@@ -68,27 +63,41 @@ class _ChartState extends State<Chart> {
                   color: kCardTitle,
                 ),
               )),
-              Expanded(
-                child: Container(
-                  child: Center(
-                    child: PieChart(
-                      dataMap: widget.dataMap,
-                      colorList: widget.colorList,
-                      chartType: ChartType.disc,
-                      //centerText: "HYBRID",
-                      legendOptions: LegendOptions(
-                        showLegendsInRow: false,
-                        legendPosition: LegendPosition.right,
-                        showLegends: true,
-                        legendShape: BoxShape.circle,
-                        legendTextStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
+              Obx(
+                () => getController(type, isSentiment).isLoading.value
+                    ? Padding(
+                        padding: EdgeInsets.only(top: 100),
+                        child: Center(child: CircularProgressIndicator()))
+                    : Expanded(
+                        child: Container(
+                          child: Center(
+                            child: PieChart(
+                              dataMap: isSentiment
+                                  ? getController(type, isSentiment)
+                                      .sentiTweet
+                                      .analysis
+                                      .getMap()
+                                  : getController(type, isSentiment)
+                                      .emoTweet
+                                      .analysis
+                                      .getMap(),
+                              colorList: isSentiment ? colorList : colorList2,
+                              chartType: ChartType.disc,
+                              //centerText: "HYBRID",
+                              legendOptions: LegendOptions(
+                                showLegendsInRow: false,
+                                legendPosition: LegendPosition.right,
+                                showLegends: true,
+                                legendShape: BoxShape.circle,
+                                legendTextStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              ),
+              )
             ],
           ),
         ),
