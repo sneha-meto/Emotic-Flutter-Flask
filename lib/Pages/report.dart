@@ -73,7 +73,9 @@ class _ReportState extends State<Report> {
                   widget.type,
                   widget.isSenti,
                 )),
-//            widget.type == "text" ? Container() : ViewAll()
+            widget.type == "text"
+                ? Container()
+                : ViewAll(isSenti: widget.isSenti, type: widget.type)
           ],
         ),
       ),

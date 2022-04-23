@@ -2,15 +2,23 @@ import 'dart:convert';
 import 'package:emoticflutter/Components/popular.dart';
 import 'package:emoticflutter/Utilities/color.dart';
 import 'package:flutter/material.dart';
+import 'package:emoticflutter/Utilities/controller_services.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
-class ViewAll extends StatefulWidget {
-  const ViewAll({Key? key}) : super(key: key);
+class ViewAll extends StatelessWidget {
+  const ViewAll({Key? key, required this.isSenti, required this.type})
+      : super(key: key);
+  final bool isSenti;
+  final String type;
 
-  @override
-  State<ViewAll> createState() => _ViewAllState();
-}
+  List getTweets() {
+    if (isSenti) {
+      return getController(type, isSenti).sentiTweet.tweets;
+    } else {
+      return getController(type, isSenti).emoTweet.tweets;
+    }
+  }
 
-class _ViewAllState extends State<ViewAll> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -31,7 +39,8 @@ class _ViewAllState extends State<ViewAll> {
                 offset: Offset(2, 2), // changes position of shadow
               ),
             ]),
-        child: ExpandableListView(),
+        child: ExpandableListView(
+            tweets: getTweets(), isSenti: isSenti, type: type),
         /*child: AutoSizeText(
           widget.textName,
           maxLines: 3,
@@ -45,6 +54,12 @@ class _ViewAllState extends State<ViewAll> {
 }
 
 class ExpandableListView extends StatefulWidget {
+  List tweets;
+  final bool isSenti;
+  final String type;
+
+  ExpandableListView(
+      {required this.tweets, required this.isSenti, required this.type});
   @override
   _ExpandableListViewState createState() => new _ExpandableListViewState();
 }
@@ -54,12 +69,12 @@ class _ExpandableListViewState extends State<ExpandableListView> {
 
   @override
   Widget build(BuildContext context) {
-    return new Column(
+    return Column(
       children: <Widget>[
-        new Container(
+        Container(
           //color: Colors.blue,
-          padding: new EdgeInsets.fromLTRB(5, 0, 5, 5),
-          child: new Row(
+          padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
@@ -75,7 +90,7 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                         fontWeight: FontWeight.w600,
                         color: kCardTitle),
               ),
-              new IconButton(
+              IconButton(
                   icon: Icon(
                     expandFlag
                         ? Icons.keyboard_arrow_up
@@ -91,31 +106,19 @@ class _ExpandableListViewState extends State<ExpandableListView> {
             ],
           ),
         ),
-        new ExpandableContainer(
+        ExpandableContainer(
             expanded: expandFlag,
-            child: FutureBuilder(
-              future: DefaultAssetBundle.of(context)
-                  .loadString('assets/loadjson/details.json'),
-              builder: (context, snapshot) {
-                // Decode the JSON
-                var newData = json.decode(snapshot.data.toString());
-                return ListView.builder(
-                  itemCount: newData == null ? 0 : newData.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container();
-
-//                      TweetContainer(
-//                      user: newData[index]['text'].toString(),
-//                      userHandle: newData[index]['text'].toString(),
-//                      text: newData[index]['text'].toString(),
-//                      time: newData[index]['img'].toString(),
-//                      reTweet: newData[index]['img'].toString(),
-//                      comment: newData[index]['img'].toString(),
-//                      likes: newData[index]['img'].toString(),
-//                    );
-                  },
-                );
-              },
+            child: Obx(
+              () => getController(widget.type, widget.isSenti).isLoading.value
+                  ? Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      itemCount: widget.tweets.length,
+                      itemBuilder: (BuildContext context, int i) {
+                        return TweetContainer(
+                          tweet: widget.tweets[i],
+                        );
+                      },
+                    ),
             )),
       ],
     );
@@ -131,7 +134,7 @@ class ExpandableContainer extends StatelessWidget {
   ExpandableContainer({
     required this.child,
     this.collapsedHeight = 0.0,
-    this.expandedHeight = 300.0,
+    this.expandedHeight = 400.0,
     this.expanded = true,
   });
 
@@ -139,12 +142,12 @@ class ExpandableContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return new AnimatedContainer(
-      duration: new Duration(milliseconds: 500),
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 500),
       curve: Curves.easeInOut,
       width: screenWidth,
       height: expanded ? expandedHeight : collapsedHeight,
-      child: new Container(
+      child: Container(
         child: child,
         //decoration: new BoxDecoration(border: new Border.all(width: 1.0,
         //color: Colors.blue,
