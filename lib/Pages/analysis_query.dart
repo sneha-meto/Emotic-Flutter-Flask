@@ -1,16 +1,25 @@
 import 'package:emoticflutter/APIs/twitter_senti_services.dart';
-import 'package:emoticflutter/Constants/color.dart';
+import 'package:emoticflutter/Utilities/color.dart';
 import 'package:emoticflutter/components/nav_bar.dart';
 import 'package:emoticflutter/components/text_box.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:emoticflutter/Pages/report.dart';
+import 'package:emoticflutter/Controllers/text_controller.dart';
+import 'package:emoticflutter/Controllers/twitter_emo_controller.dart';
+import 'package:emoticflutter/Controllers/twitter_senti_controller.dart';
 
 enum QueryType { tag, text, user }
 
 class QueryPage extends StatefulWidget {
   QueryPage({Key? key, required this.isSenti}) : super(key: key);
   final bool isSenti;
+  final TextController textController = Get.put(TextController());
+  final TwitterSentiController twitterSentiController =
+      Get.put(TwitterSentiController());
+  final TwitterEmoController twitterEmoController =
+      Get.put(TwitterEmoController());
 
   @override
   State<QueryPage> createState() => _QueryPageState();
@@ -21,6 +30,32 @@ class _QueryPageState extends State<QueryPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _text = TextEditingController();
+
+  callApi(
+    type,
+    input,
+  ) {
+    if (type == "user") {
+      if (widget.isSenti) {
+        widget.twitterSentiController.fetchUserSentiment(input);
+      } else {
+        widget.twitterEmoController.fetchUserEmotion(input);
+      }
+    } else if (type == "tag") {
+      if (widget.isSenti) {
+        widget.twitterSentiController.fetchTagSentiment(input);
+      } else {
+        widget.twitterEmoController.fetchTagEmotion(input);
+      }
+    } else {
+      if (widget.isSenti) {
+        widget.textController.fetchTextSentiment(input);
+      } else {
+        widget.textController.fetchTextEmotion(input);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,6 +145,7 @@ class _QueryPageState extends State<QueryPage> {
                   controller: _text,
                   fieldName: "Text",
                   iconTapFunction: () {
+                    callApi(queryType.name, _text.text);
                     Get.to(() => Report(
                           isSenti: widget.isSenti,
                           input: _text.text,

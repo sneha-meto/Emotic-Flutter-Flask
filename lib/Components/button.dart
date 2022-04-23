@@ -1,4 +1,4 @@
-import 'package:emoticflutter/Constants/color.dart';
+import 'package:emoticflutter/Utilities/color.dart';
 import 'package:flutter/material.dart';
 //final kCyan = Color(0xff49C9C4);
 

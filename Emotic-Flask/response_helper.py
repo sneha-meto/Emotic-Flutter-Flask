@@ -16,7 +16,7 @@ def get_related_tags(tags):
 def get_popular_tweets(twts):
     popularity = []
     for twt in twts:
-        popularity.append([twt['tweet_id'], twt['retweets'] + twt['likes']])
+        popularity.append([twt, twt['retweets'] + twt['likes']])
     popularity.sort(key=lambda x: x[1])
     popularity = [twt[0] for twt in popularity]
     if len(popularity) >= 10:
@@ -55,7 +55,7 @@ def get_emo_response(cleaned_tweets):
         all_emotions.append(emotion)
         # 'hashtags': twt[7]
         all_tags.extend(twt[7])
-        twt_response = {'emotion': emotion, 'text': twt[1], 'username': twt[2],
+        twt_response = {'sentiment': emotion, 'text': twt[1], 'username': twt[2],
                         'screen_name': twt[3], 'location': twt[4], 'profile_pic': twt[5], 'retweets': twt[6],
                         'likes': twt[8], 'tweet_id': twt[9], 'tweet_time': twt[10]}
         twt_responses.append(twt_response)

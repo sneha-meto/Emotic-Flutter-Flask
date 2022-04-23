@@ -20,15 +20,15 @@ class SentiTwitter {
 
   Analysis analysis;
   int count;
-  List<double> popularTweets;
+  List<Tweet> popularTweets;
   List<String> relatedTags;
   List<Tweet> tweets;
 
   factory SentiTwitter.fromJson(Map<String, dynamic> json) => SentiTwitter(
         analysis: Analysis.fromJson(json["analysis"]),
         count: json["count"],
-        popularTweets:
-            List<double>.from(json["popular_tweets"].map((x) => x.toDouble())),
+        popularTweets: List<Tweet>.from(
+            json["popular_tweets"].map((x) => Tweet.fromJson(x))),
         relatedTags: List<String>.from(json["related_tags"].map((x) => x)),
         tweets: List<Tweet>.from(json["tweets"].map((x) => Tweet.fromJson(x))),
       );
@@ -36,7 +36,8 @@ class SentiTwitter {
   Map<String, dynamic> toJson() => {
         "analysis": analysis.toJson(),
         "count": count,
-        "popular_tweets": List<dynamic>.from(popularTweets.map((x) => x)),
+        "popular_tweets":
+            List<dynamic>.from(popularTweets.map((x) => x.toJson())),
         "related_tags": List<dynamic>.from(relatedTags.map((x) => x)),
         "tweets": List<dynamic>.from(tweets.map((x) => x.toJson())),
       };
@@ -106,7 +107,7 @@ class Tweet {
   String profilePic;
   int retweets;
   String screenName;
-  Sentiment? sentiment;
+  String sentiment;
   double subjectivity;
   String text;
   double tweetId;
@@ -119,7 +120,7 @@ class Tweet {
         profilePic: json["profile_pic"],
         retweets: json["retweets"],
         screenName: json["screen_name"],
-        sentiment: sentimentValues.map[json["sentiment"]],
+        sentiment: json["sentiment"],
         subjectivity: json["subjectivity"].toDouble(),
         text: json["text"],
         tweetId: json["tweet_id"].toDouble(),
@@ -133,7 +134,7 @@ class Tweet {
         "profile_pic": profilePic,
         "retweets": retweets,
         "screen_name": screenName,
-        "sentiment": sentimentValues.reverse[sentiment],
+        "sentiment": sentiment,
         "subjectivity": subjectivity,
         "text": text,
         "tweet_id": tweetId,
@@ -141,14 +142,6 @@ class Tweet {
         "username": username,
       };
 }
-
-enum Sentiment { POSITIVE, NEUTRAL, NEGATIVE }
-
-final sentimentValues = EnumValues({
-  "negative": Sentiment.NEGATIVE,
-  "neutral": Sentiment.NEUTRAL,
-  "positive": Sentiment.POSITIVE
-});
 
 class EnumValues<T> {
   Map<String, T> map;

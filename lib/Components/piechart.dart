@@ -1,13 +1,13 @@
-import 'package:emoticflutter/Constants/color.dart';
+import 'package:emoticflutter/Utilities/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:emoticflutter/Utilities/controller_services.dart';
 
 class Chart extends StatelessWidget {
-  Chart({Key? key, required this.isSentiment, required this.type})
+  Chart({Key? key, required this.isSenti, required this.type})
       : super(key: key);
-  final bool isSentiment;
+  final bool isSenti;
   final String type;
 
 //  final Map<String, double> dataMap = {
@@ -64,7 +64,7 @@ class Chart extends StatelessWidget {
                 ),
               )),
               Obx(
-                () => getController(type, isSentiment).isLoading.value
+                () => getController(type, isSenti).isLoading.value
                     ? Padding(
                         padding: EdgeInsets.only(top: 100),
                         child: Center(child: CircularProgressIndicator()))
@@ -72,16 +72,16 @@ class Chart extends StatelessWidget {
                         child: Container(
                           child: Center(
                             child: PieChart(
-                              dataMap: isSentiment
-                                  ? getController(type, isSentiment)
+                              dataMap: isSenti
+                                  ? getController(type, isSenti)
                                       .sentiTweet
                                       .analysis
                                       .getMap()
-                                  : getController(type, isSentiment)
+                                  : getController(type, isSenti)
                                       .emoTweet
                                       .analysis
                                       .getMap(),
-                              colorList: isSentiment ? colorList : colorList2,
+                              colorList: isSenti ? colorList : colorList2,
                               chartType: ChartType.disc,
                               //centerText: "HYBRID",
                               legendOptions: LegendOptions(

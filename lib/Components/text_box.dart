@@ -1,6 +1,6 @@
 import 'package:emoticflutter/Components/simple_icon_button.dart';
 import 'package:flutter/material.dart';
-import 'package:emoticflutter/Constants/color.dart';
+import 'package:emoticflutter/Utilities/color.dart';
 
 class TextBox extends StatefulWidget {
   final TextInputType textInputType;

@@ -1,4 +1,4 @@
-import 'package:emoticflutter/Constants/color.dart';
+import 'package:emoticflutter/Utilities/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:emoticflutter/Controllers/text_controller.dart';
@@ -6,63 +6,15 @@ import 'package:emoticflutter/Controllers/twitter_emo_controller.dart';
 import 'package:emoticflutter/Controllers/twitter_senti_controller.dart';
 import 'package:emoticflutter/Models/sentiment_twitter.dart';
 import 'package:emoticflutter/Utilities/controller_services.dart';
+import 'package:emoticflutter/Utilities/paths.dart';
 
 class Predominant extends StatelessWidget {
   final bool isSenti;
   final String type;
-//  late double subjectivity;
-  // late String sentiment;
 
 //  final TextController textController = Get.find();
 //  final TwitterSentiController twitterSentiController = Get.find();
 //  final TwitterEmoController twitterEmoController = Get.find();
-
-  Map iconPath = {
-    "positive": "assets/images/positive.png",
-    "neutral": "assets/images/neutral.png",
-    "negative": "assets/images/sad.png",
-    "fear": "assets/images/fear.png",
-    "sadness": "assets/images/sad.png",
-    "surprise": "assets/images/surprised.png",
-    "anger": "assets/images/angry.png",
-    "joy": "assets/images/joy.png",
-    "love": "assets/images/love.png",
-    "a tie": "assets/images/neutral.png"
-  };
-//
-//  String getOverallSentiment(type,isSenti) {
-//    if (type == "user") {
-//      if (isSenti) {
-//        return twitterSentiController.sentiTweet.analysis.getPredominant();
-//      } else {
-//        return twitterEmoController.emoTweet.analysis.getPredominant();
-//      }
-//    } else if (type == "tag") {
-//      if (isSenti) {
-//        return twitterSentiController.sentiTweet.analysis.getPredominant();
-//      } else {
-//        return twitterEmoController.emoTweet.analysis.getPredominant();
-//      }
-//    } else {
-//      if (isSenti) {
-//        return textController.textSentiment.sentiment;
-//      } else {
-//        return textController.textEmotion.sentiment;
-//      }
-//    }
-//  }
-//
-//  dynamic getController(type,isSenti) {
-//    if (type != "text") {
-//      if (isSenti) {
-//        return twitterSentiController;
-//      } else {
-//        return twitterEmoController;
-//      }
-//    } else {
-//      return textController;
-//    }
-//  }
 
   Predominant({
     Key? key,

@@ -1,8 +1,6 @@
 import 'dart:convert';
-
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:emoticflutter/Components/popular.dart';
-import 'package:emoticflutter/Constants/color.dart';
+import 'package:emoticflutter/Utilities/color.dart';
 import 'package:flutter/material.dart';
 
 class ViewAll extends StatefulWidget {
@@ -104,13 +102,17 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                 return ListView.builder(
                   itemCount: newData == null ? 0 : newData.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return Tweet(user: newData[index]['text'].toString(), userHandle: newData[index]['text'].toString(),
-                      text: newData[index]['text'].toString(),
-                      time: newData[index]['img'].toString(),
-                      reTweet: newData[index]['img'].toString(),
-                      comment: newData[index]['img'].toString(),
-                      likes: newData[index]['img'].toString(),
-                    );
+                    return Container();
+
+//                      TweetContainer(
+//                      user: newData[index]['text'].toString(),
+//                      userHandle: newData[index]['text'].toString(),
+//                      text: newData[index]['text'].toString(),
+//                      time: newData[index]['img'].toString(),
+//                      reTweet: newData[index]['img'].toString(),
+//                      comment: newData[index]['img'].toString(),
+//                      likes: newData[index]['img'].toString(),
+//                    );
                   },
                 );
               },

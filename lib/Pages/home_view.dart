@@ -1,6 +1,6 @@
 import 'package:emoticflutter/Pages/analysis_query.dart';
 import 'package:emoticflutter/components/button.dart';
-import 'package:emoticflutter/Constants/color.dart';
+import 'package:emoticflutter/Utilities/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 

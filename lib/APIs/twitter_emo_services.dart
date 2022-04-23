@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:emoticflutter/Constants/auth.dart';
+import 'package:emoticflutter/Utilities/auth.dart';
 import 'package:emoticflutter/Models/emotion_twitter.dart';
 
 class TwitterEmoServices {

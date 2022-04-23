@@ -21,15 +21,15 @@ class EmoTwitter {
   Analysis analysis;
 
   int count;
-  List<double> popularTweets;
+  List<Tweet> popularTweets;
   List<String> relatedTags;
   List<Tweet> tweets;
 
   factory EmoTwitter.fromJson(Map<String, dynamic> json) => EmoTwitter(
         analysis: Analysis.fromJson(json["analysis"]),
         count: json["count"],
-        popularTweets:
-            List<double>.from(json["popular_tweets"].map((x) => x.toDouble())),
+        popularTweets: List<Tweet>.from(
+            json["popular_tweets"].map((x) => Tweet.fromJson(x))),
         relatedTags: List<String>.from(json["related_tags"].map((x) => x)),
         tweets: List<Tweet>.from(json["tweets"].map((x) => Tweet.fromJson(x))),
       );
@@ -112,7 +112,7 @@ class Analysis {
 
 class Tweet {
   Tweet({
-    required this.emotion,
+    required this.sentiment,
     required this.likes,
     required this.location,
     required this.profilePic,
@@ -124,7 +124,7 @@ class Tweet {
     required this.username,
   });
 
-  Emotion? emotion;
+  String sentiment;
   int likes;
   String location;
   String profilePic;
@@ -136,7 +136,7 @@ class Tweet {
   String username;
 
   factory Tweet.fromJson(Map<String, dynamic> json) => Tweet(
-        emotion: emotionValues.map[json["emotion"]],
+        sentiment: json["sentiment"],
         likes: json["likes"],
         location: json["location"],
         profilePic: json["profile_pic"],
@@ -149,7 +149,7 @@ class Tweet {
       );
 
   Map<String, dynamic> toJson() => {
-        "emotion": emotionValues.reverse[emotion],
+        "sentiment": sentiment,
         "likes": likes,
         "location": location,
         "profile_pic": profilePic,
@@ -161,11 +161,6 @@ class Tweet {
         "username": username,
       };
 }
-
-enum Emotion { JOY, SADNESS }
-
-final emotionValues =
-    EnumValues({"joy": Emotion.JOY, "sadness": Emotion.SADNESS});
 
 class EnumValues<T> {
   Map<String, T> map;

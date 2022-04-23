@@ -3,7 +3,7 @@ import 'package:emoticflutter/pages/report.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:emoticflutter/Pages/analysis_query.dart';
-import 'package:emoticflutter/Constants/color.dart';
+import 'package:emoticflutter/Utilities/color.dart';
 
 void main() {
   runApp(const MyApp());

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:emoticflutter/Constants/color.dart';
+import 'package:emoticflutter/Utilities/color.dart';
 
 class SimpleIconButton extends StatefulWidget {
   final Function tapFunction;

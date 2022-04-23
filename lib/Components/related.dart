@@ -1,16 +1,16 @@
 import 'dart:convert';
-
-import 'package:emoticflutter/Constants/color.dart';
+import 'package:emoticflutter/Utilities/color.dart';
 import 'package:flutter/material.dart';
+import 'package:emoticflutter/Utilities/controller_services.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
-class Related extends StatefulWidget {
-  const Related({Key? key}) : super(key: key);
+class Related extends StatelessWidget {
+  const Related({Key? key, required this.isSenti, required this.type})
+      : super(key: key);
 
-  @override
-  State<Related> createState() => _RelatedState();
-}
+  final bool isSenti;
+  final String type;
 
-class _RelatedState extends State<Related> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -36,39 +36,35 @@ class _RelatedState extends State<Related> {
                   ),
                 ),
               ),
-              Expanded(
-                child: Container(
-                  //color: kGrey,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-
-                      children: [
-                        Expanded(
-                          child: Container(
-                            child: Center(
-                              child: FutureBuilder(
-                                future: DefaultAssetBundle.of(context)
-                                    .loadString('assets/loadjson/details.json'),
-                                builder: (context, snapshot) {
-                                  // Decode the JSON
-                                  var newData = json.decode(snapshot.data.toString());
-                                  return ListView.builder(
-                                    itemCount: newData == null ? 0 : newData.length,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      return TagContainer(textName: newData[index]['img']);
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
+              Obx(
+                () => getController(type, isSenti).isLoading.value
+                    ? Padding(
+                        padding: EdgeInsets.only(top: 100),
+                        child: Center(child: CircularProgressIndicator()))
+                    : Expanded(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: isSenti
+                              ? getController(type, isSenti)
+                                  .sentiTweet
+                                  .relatedTags
+                                  .length
+                              : getController(type, isSenti)
+                                  .emoTweet
+                                  .relatedTags
+                                  .length,
+                          itemBuilder: (BuildContext context, int i) {
+                            return TagContainer(
+                                textName: isSenti
+                                    ? getController(type, isSenti)
+                                        .sentiTweet
+                                        .relatedTags[i]
+                                    : getController(type, isSenti)
+                                        .emoTweet
+                                        .relatedTags[i]);
+                          },
                         ),
-                      ],
-                    ),
-                  ),
-                ),
+                      ),
               ),
             ],
           ),
@@ -87,11 +83,11 @@ class TagContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
+    return Center(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
           decoration: BoxDecoration(
             color: kOrange,
 //            border: Border.all(width: 3, color: kOrange),

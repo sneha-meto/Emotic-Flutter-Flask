@@ -1,17 +1,27 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:emoticflutter/Constants/color.dart';
+import 'package:emoticflutter/Utilities/color.dart';
+import 'package:emoticflutter/Utilities/controller_services.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:emoticflutter/Utilities/time.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:emoticflutter/Utilities/paths.dart';
 
-class Popular extends StatefulWidget {
-  const Popular({Key? key}) : super(key: key);
+class Popular extends StatelessWidget {
+  const Popular({Key? key, required this.isSenti, required this.type})
+      : super(key: key);
 
-  @override
-  State<Popular> createState() => _PopularState();
-}
+  final bool isSenti;
+  final String type;
 
-class _PopularState extends State<Popular> {
-  // List data=[];
+  List getTweets() {
+    if (isSenti) {
+      return getController(type, isSenti).sentiTweet.popularTweets;
+    } else {
+      return getController(type, isSenti).emoTweet.popularTweets;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -20,79 +30,55 @@ class _PopularState extends State<Popular> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.only(bottom: 5),
-                //color: kGrey,
-                child: Text(
-                  'Popular Tweets',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w700,
-                    color: kCardTitle,
-                  ),
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
+              //color: kGrey,
+              child: Text(
+                'Popular Tweets',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w700,
+                  color: kCardTitle,
                 ),
               ),
-              Expanded(
-                child: Container(
-                  //color: kGrey,
-                  child: Center(
-                    child: FutureBuilder(
-                      future: DefaultAssetBundle.of(context)
-                          .loadString('assets/loadjson/details.json'),
-                      builder: (context, snapshot) {
-                        // Decode the JSON
-                        var newData = json.decode(snapshot.data.toString());
-                        return ListView.builder(
-                          itemCount: newData == null ? 0 : newData.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Tweet(
-                              user: newData[index]['text'].toString(),
-                              userHandle: newData[index]['text'].toString(),
-                              text: newData[index]['text'].toString(),
-                              time: newData[index]['img'].toString(),
-                              reTweet: newData[index]['img'].toString(),
-                              comment: newData[index]['text'].toString(),
-                              likes: newData[index]['text'].toString(),
-                            );
-                          },
-                        );
-                      },
+            ),
+            Obx(
+              () => getController(type, isSenti).isLoading.value
+                  ? Padding(
+                      padding: EdgeInsets.only(top: 100),
+                      child: Center(child: CircularProgressIndicator()))
+                  : Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: ListView.builder(
+                            itemCount: getTweets().length,
+                            itemBuilder: (BuildContext context, int i) {
+                              var tweets = getTweets();
+                              return TweetContainer(
+                                tweet: tweets[i],
+                              );
+                            },
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
   }
 }
 
-class Tweet extends StatelessWidget {
-  final String user;
-  final String userHandle;
-  final String text;
-  final String time;
-  final String reTweet;
-  final String comment;
-  final String likes;
+class TweetContainer extends StatelessWidget {
+  final tweet;
 
-  Tweet(
-      {required this.user,
-      required this.userHandle,
-      required this.text,
-      required this.time,
-      required this.reTweet,
-      required this.comment,
-      required this.likes});
+  TweetContainer({required this.tweet});
 
   @override
   Widget build(BuildContext context) {
@@ -111,16 +97,15 @@ class Tweet extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 CircleAvatar(
-                  child: Text(user.substring(0, 1)),
+                  radius: 20.0,
+                  backgroundImage: NetworkImage(tweet.profilePic),
+                  backgroundColor: Colors.transparent,
                 ),
                 _tweetContent(),
                 FittedBox(
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      height: 20,
-                      child: Image.network('https://picsum.photos/250?image=9'),
-                    ),
+                  child: SizedBox(
+                    height: 35,
+                    child: Image.asset(iconPath[tweet.sentiment]),
                   ),
                 ),
               ],
@@ -142,14 +127,15 @@ class Tweet extends StatelessWidget {
           children: <Widget>[
             Row(
               children: <Widget>[
-                AutoSizeText(user,
+                AutoSizeText(tweet.screenName,
                     maxLines: 2,
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),
                 Flexible(
                   child: Container(
                     margin: EdgeInsets.only(left: 5.0),
-                    child: Text(userHandle + " · $time",
+                    child: Text(
+                        tweet.username + " · ${getTime(tweet.tweetTime)}",
                         maxLines: 2,
                         style: TextStyle(
                             color: Colors.black45,
@@ -160,7 +146,7 @@ class Tweet extends StatelessWidget {
             ),
             Container(
                 margin: EdgeInsets.only(top: 5.0),
-                child: Text(text,
+                child: Text(tweet.text,
                     maxLines: 2, style: TextStyle(color: Colors.black))),
             Container(
               margin: EdgeInsets.only(top: 5.0),
@@ -169,14 +155,11 @@ class Tweet extends StatelessWidget {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Icon(
-                        Icons.message,
-                        color: Colors.black45,
-                        size: 20,
-                      ),
+                      Icon(Icons.favorite_border,
+                          color: Colors.black45, size: 20),
                       Container(
                         margin: EdgeInsets.only(left: 3.0),
-                        child: Text(comment.toString(),
+                        child: Text(tweet.likes.toString(),
                             style:
                                 TextStyle(color: Colors.black45, fontSize: 12)),
                       )
@@ -187,19 +170,7 @@ class Tweet extends StatelessWidget {
                       Icon(Icons.repeat, color: Colors.black45, size: 20),
                       Container(
                         margin: EdgeInsets.only(left: 3.0),
-                        child: Text(reTweet,
-                            style:
-                                TextStyle(color: Colors.black45, fontSize: 12)),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Icon(Icons.favorite_border,
-                          color: Colors.black45, size: 20),
-                      Container(
-                        margin: EdgeInsets.only(left: 3.0),
-                        child: Text(likes,
+                        child: Text(tweet.retweets.toString(),
                             style:
                                 TextStyle(color: Colors.black45, fontSize: 12)),
                       )
