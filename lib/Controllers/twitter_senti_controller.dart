@@ -14,6 +14,7 @@ class TwitterSentiController extends GetxController {
 
   void fetchTagSentiment(tag) async {
     isLoading(true);
+
     var tagSentiment = await TwitterSentiServices().fetchTagSentiment(tag);
     sentiTweet = tagSentiment!;
     isLoading(false);

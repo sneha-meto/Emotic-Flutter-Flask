@@ -11,14 +11,6 @@ class ViewAll extends StatelessWidget {
   final bool isSenti;
   final String type;
 
-  List getTweets() {
-    if (isSenti) {
-      return getController(type, isSenti).sentiTweet.tweets;
-    } else {
-      return getController(type, isSenti).emoTweet.tweets;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -39,8 +31,7 @@ class ViewAll extends StatelessWidget {
                 offset: Offset(2, 2), // changes position of shadow
               ),
             ]),
-        child: ExpandableListView(
-            tweets: getTweets(), isSenti: isSenti, type: type),
+        child: ExpandableListView(isSenti: isSenti, type: type),
         /*child: AutoSizeText(
           widget.textName,
           maxLines: 3,
@@ -54,18 +45,24 @@ class ViewAll extends StatelessWidget {
 }
 
 class ExpandableListView extends StatefulWidget {
-  List tweets;
+//  List tweets;
   final bool isSenti;
   final String type;
 
-  ExpandableListView(
-      {required this.tweets, required this.isSenti, required this.type});
+  ExpandableListView({required this.isSenti, required this.type});
   @override
   _ExpandableListViewState createState() => new _ExpandableListViewState();
 }
 
 class _ExpandableListViewState extends State<ExpandableListView> {
   bool expandFlag = false;
+  List getTweets() {
+    if (widget.isSenti) {
+      return getController(widget.type, widget.isSenti).sentiTweet.tweets;
+    } else {
+      return getController(widget.type, widget.isSenti).emoTweet.tweets;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,15 +87,15 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                         fontWeight: FontWeight.w600,
                         color: kCardTitle),
               ),
-              IconButton(
-                  icon: Icon(
+              InkWell(
+                  child: Icon(
                     expandFlag
                         ? Icons.keyboard_arrow_up
                         : Icons.keyboard_arrow_down,
                     color: Colors.black,
                     size: 30.0,
                   ),
-                  onPressed: () {
+                  onTap: () {
                     setState(() {
                       expandFlag = !expandFlag;
                     });
@@ -112,12 +109,15 @@ class _ExpandableListViewState extends State<ExpandableListView> {
               () => getController(widget.type, widget.isSenti).isLoading.value
                   ? Center(child: CircularProgressIndicator())
                   : ListView.builder(
-                      itemCount: widget.tweets.length,
+                      itemCount: getTweets().length,
                       itemBuilder: (BuildContext context, int i) {
+                        var tweets = getTweets();
                         return TweetContainer(
-                          tweet: widget.tweets[i],
+                          tweet: tweets[i],
                         );
                       },
+                      itemExtent: 120,
+                      shrinkWrap: true,
                     ),
             )),
       ],
@@ -135,7 +135,7 @@ class ExpandableContainer extends StatelessWidget {
     required this.child,
     this.collapsedHeight = 0.0,
     this.expandedHeight = 400.0,
-    this.expanded = true,
+    this.expanded = false,
   });
 
   @override
@@ -145,13 +145,10 @@ class ExpandableContainer extends StatelessWidget {
     return AnimatedContainer(
       duration: Duration(milliseconds: 500),
       curve: Curves.easeInOut,
-      width: screenWidth,
+//      width: screenWidth,
       height: expanded ? expandedHeight : collapsedHeight,
       child: Container(
         child: child,
-        //decoration: new BoxDecoration(border: new Border.all(width: 1.0,
-        //color: Colors.blue,
-        //)),
       ),
     );
   }
