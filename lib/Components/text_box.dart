@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:emoticflutter/Utilities/color.dart';
 
 class TextBox extends StatefulWidget {
+
   final TextInputType textInputType;
   final String hint;
   final TextEditingController controller;
@@ -21,6 +22,30 @@ class TextBox extends StatefulWidget {
 }
 
 class _TextBoxState extends State<TextBox> {
+  String? validate(String value, String type) {
+    if (value.isEmpty) {
+      return 'This field is required';
+    }
+
+    switch (type) {
+
+      case "tag":
+        Pattern pattern = r"\B#[a-zA-Z0-9]+\b";
+        RegExp regex = new RegExp(pattern.toString());
+        if (!regex.hasMatch(value) || value == null)
+          return 'Enter a valid hashtag';
+        break;
+
+      case "user":
+        Pattern pattern = r"^@(?=.*\w)[\w]{1,15}$";
+        RegExp regex = new RegExp(pattern.toString());
+        if (!regex.hasMatch(value) || value == null)
+          return 'Enter a valid user name';
+        break;
+    }
+
+    return null;
+  }
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -31,7 +56,10 @@ class _TextBoxState extends State<TextBox> {
           autocorrect: false,
 //          style: TextStyle(color: Colors.white),
           keyboardType: widget.textInputType,
-          validator: (value) {},
+          validator: (value) {
+            String? result = validate(value!, widget.fieldName);
+            return result;
+          },
           controller: widget.controller,
           decoration: InputDecoration(
             filled: true,
