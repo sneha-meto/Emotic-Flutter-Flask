@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import emotion_analysis as emo
 import sentiment_analysis as senti
 import twitter_fetch as tf
@@ -6,6 +7,7 @@ import response_helper as helper
 import configparser
 
 app = Flask(__name__)
+CORS(app)
 # @app.route('/',methods=['GET'])
 # def index():
 #     json_file = {}
@@ -43,6 +45,7 @@ def classify_senti_text():
      input_json = request.get_json(force=True)
      data = senti.get_text_sentiment(input_json['text'])
      response = {'sentiment':data[0],'subjectivity':data[1]}
+     # response.headers.add('Access-Control-Allow-Origin', '*')
      return jsonify(response),200
 
 
@@ -63,23 +66,24 @@ def classify_senti_user():
      response = helper.get_senti_response(cleaned_tweets)
      return jsonify(response),200
 
-@app.before_request
-def authenticate_api():
-     config = configparser.ConfigParser()
-     config.read('auth.ini')
-     api_key = config['api']['key']
-
-     headers = request.headers
-     auth = headers.get("X-Api-Key")
-     if auth != api_key:
-          return jsonify({"message": "ERROR: Unauthorized"}), 401
+# @app.before_request
+# def authenticate_api():
+#      config = configparser.ConfigParser()
+#      config.read('auth.ini')
+#      api_key = config['api']['key']
+#
+#      headers = request.headers
+#      auth = headers.get("X-Api-Key")
+#      if auth != api_key:
+#           return jsonify({"message": "ERROR: Unauthorized"}), 401
 
 # @app.after_request
-# def add_headers(resp):
+# def add_headers(response):
+#      response.headers.add('Access-Control-Allow-Origin', '*')
 #     resp.headers['Access-Control-Allow-Origin'] = '*'
 #     resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
 #     resp.headers['Referrer-Policy'] = 'no-referrer-when-downgrade'
-#     return resp
+#      return jsonify(response),200
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,14 +1,30 @@
+import 'package:emoticflutter/Utilities/color.dart';
 import 'package:emoticflutter/pages/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 
-class NavBar extends StatelessWidget {
+class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);
 
+  @override
+  State<NavBar> createState() => _NavBarState();
+}
+
+class _NavBarState extends State<NavBar> {
+  Color buttonColor = Colors.black;
   @override
   Widget build(BuildContext context) {
     return Flexible(
       child: Container(
+        decoration: BoxDecoration(
+          color: kPaleYellow,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black38,
+              blurRadius: 10,
+            ),
+          ],
+        ),
         //height: 100,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -25,7 +41,10 @@ class NavBar extends StatelessWidget {
                     ),
                     Text(
                       "Emotic",
-                      style: TextStyle(fontSize: 25),
+                      style: TextStyle(
+                          fontSize: 23,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black87),
                     )
                   ],
                 ),
@@ -41,12 +60,23 @@ class NavBar extends StatelessWidget {
                 onTap: () {
                   Get.to(Home());
                 },
+                onHover: (isHover) {
+                  if (isHover) {
+                    setState(() {
+                      buttonColor = kOrange;
+                    });
+                  } else {
+                    setState(() {
+                      buttonColor = Colors.black;
+                    });
+                  }
+                },
                 child: Row(
                   children: [
-                    Icon(Icons.home),
+                    Icon(Icons.home, color: buttonColor),
                     Text(
                       " Home",
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18, color: buttonColor),
                     ),
                   ],
                 ),

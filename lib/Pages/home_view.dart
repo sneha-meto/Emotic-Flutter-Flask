@@ -26,9 +26,10 @@ class _HomeState extends State<Home> {
                 child: Text(
                   'Emotic',
                   style: TextStyle(
-                    fontSize: 45,
-                    fontWeight: FontWeight.w900,
-                  ),
+                      color: Colors.black87,
+                      fontSize: 45,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 3),
                 ),
               ),
               SizedBox(
@@ -68,7 +69,10 @@ List<Widget> pageChildren(context, width) {
           Text(
             'Perform sentiment analysis or emotion analysis and generate an analysis report on input text as well as twitter hashtags and user handles. \n\nPick analysis type to get started!',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18, color: Colors.black54),
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.black54,
+            ),
           ),
           SizedBox(
             height: 20,
